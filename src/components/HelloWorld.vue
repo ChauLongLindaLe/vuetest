@@ -1,7 +1,28 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>{{info}}</p>
+    <p class="title"> Name that capital!</p>
+
+    <button class="button is-success" @click="getRandomCountry"> Generate Random Country</button>
+    <div class="section">
+      <div v-if="randomCountry">
+        <img :src="randomCountry.flag" alt="Country Flag" class="flag">
+        <h1 class="subtitle">{{ randomCountry.name }}</h1>
+      </div>
+      <div class="field">
+        <p class="control has-icons-left has-icons-right">
+          <input class="input" type="text" v-model="answer" placeholder="Answer here">
+          <span class="icon is-small is-right">
+            <i class="fas fa-check"></i>
+          </span>
+        </p>
+      </div>
+    </div>
+      <p v-if="randomCountry">{{randomCountry.capital}}</p>
+    <button class="button is-success" @click="checkCapital"> Submit</button>
+
+    <p v-if="randomCountry && checkCapital() === true">Yay! That's correct</p>
+    <p v-else>Boo! You should consider a different hobby</p>
+
   </div>
 </template>
 
@@ -14,31 +35,37 @@ export default {
   },
   data(){
     return{
-      info: null
+      countryInfo: null,
+      randomCountry: null,
+      answer: '',
     }
   },
   mounted () {
     axios
       .get('https://restcountries.eu/rest/v2/all')
-      .then(response => (this.info = response))
+      .then(response => (this.countryInfo = response.data))
+  },
+  methods:{
+    getRandomCountry(){
+      this.randomCountry = this.countryInfo[Math.floor(Math.random() * this.countryInfo.length)];
+    },
+    checkCapital(){
+      if(this.randomCountry){
+        return this.randomCountry.capital.toLowerCase() === this.answer.toLowerCase();
+      }
+    }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+.flag{
+  height: 20vh;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
+.field{
+  width: 10vw;
   display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+  margin-top: 20px;
 }
 </style>
