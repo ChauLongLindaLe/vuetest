@@ -14,9 +14,9 @@
             <i class="fas fa-check"></i>
           </span>
         </p>
-        <button class="button is-success" @click="submitAnswer"> Submit</button>
-        <p>{{userMessage()}}</p>
+        <button :disabled="submitted" class="button submit-btn is-success" @click="submitAnswer"> Submit</button>
       </div>
+      <p>{{userMessage()}}</p>
     </div>
 
 
@@ -39,6 +39,7 @@ export default {
       loading: '',
       userScore: '',
       submitted: false,
+      hidden: '',
     }
   },
   mounted () {
@@ -84,6 +85,10 @@ export default {
 .field{
   width: 12vw;
   display: inline-block;
+  margin-top: 20px;
+}
+
+.submit-btn{
   margin-top: 20px;
 }
 </style>
