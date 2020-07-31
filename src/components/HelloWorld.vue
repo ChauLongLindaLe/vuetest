@@ -16,10 +16,8 @@
         </p>
       </div>
       <p v-if="randomCountry">{{randomCountry.capital}}</p>
-      <button class="button is-success" @click="checkCapital"> Submit</button>
-      <p v-if="checkCapital()">Yay! That's correct</p>
-      <p v-else-if="this.answer">Boo! You should consider a different hobby</p>
-      <p v-else>give a guess, love</p>
+      <button class="button is-success" @click="submitAnswer"> Submit</button>
+      <p>{{userMessage()}}</p>
     </div>
 
 
@@ -60,6 +58,18 @@ export default {
     checkCapital(){
       if(this.randomCountry){
         return this.randomCountry.capital.toLowerCase() === this.answer.toLowerCase();
+      }
+    },
+    submitAnswer(){
+      this.submitted = true;
+    },
+    userMessage(){
+      if(!this.submitted){
+        return 'Give a guess'
+      } else if(this.checkCapital()){
+        return 'Success!'
+      } else{
+        return 'Try again, Homes'
       }
     }
   }
