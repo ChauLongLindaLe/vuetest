@@ -14,10 +14,9 @@
             <i class="fas fa-check"></i>
           </span>
         </p>
+        <button class="button is-success" @click="submitAnswer"> Submit</button>
+        <p>{{userMessage()}}</p>
       </div>
-      <p v-if="randomCountry">{{randomCountry.capital}}</p>
-      <button class="button is-success" @click="submitAnswer"> Submit</button>
-      <p>{{userMessage()}}</p>
     </div>
 
 
@@ -69,7 +68,8 @@ export default {
       } else if(this.checkCapital()){
         return 'Success!'
       } else{
-        return 'Try again, Homes'
+        this.answer = ''
+        return `Wrong. The correct answer is ${this.randomCountry.capital}`
       }
     }
   }
