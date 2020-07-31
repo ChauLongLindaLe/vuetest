@@ -1,10 +1,9 @@
 <template>
-  <div class="hello">
+  <div>
     <p class="title"> Name that capital!</p>
-
     <button class="button is-success" @click="getRandomCountry"> Generate Random Country</button>
-    <div class="section">
-      <div v-if="randomCountry">
+    <div v-if="randomCountry" class="section">
+      <div >
         <img :src="randomCountry.flag" alt="Country Flag" class="flag">
         <h1 class="subtitle">{{ randomCountry.name }}</h1>
       </div>
@@ -16,12 +15,13 @@
           </span>
         </p>
       </div>
-    </div>
       <p v-if="randomCountry">{{randomCountry.capital}}</p>
-    <button class="button is-success" @click="checkCapital"> Submit</button>
+      <button class="button is-success" @click="checkCapital"> Submit</button>
+      <p v-if="checkCapital()">Yay! That's correct</p>
+      <p v-else-if="this.answer">Boo! You should consider a different hobby</p>
+      <p v-else>give a guess, love</p>
+    </div>
 
-    <p v-if="randomCountry && checkCapital() === true">Yay! That's correct</p>
-    <p v-else>Boo! You should consider a different hobby</p>
 
   </div>
 </template>
@@ -38,16 +38,24 @@ export default {
       countryInfo: null,
       randomCountry: null,
       answer: '',
+      error: '',
+      loading: '',
+      userScore: '',
+      submitted: false,
     }
   },
   mounted () {
+    this.loading = true;
     axios
       .get('https://restcountries.eu/rest/v2/all')
       .then(response => (this.countryInfo = response.data))
+      .catch(error => (this.error = error ))
+      .then( () => { this.loading = false });
   },
   methods:{
     getRandomCountry(){
       this.randomCountry = this.countryInfo[Math.floor(Math.random() * this.countryInfo.length)];
+      this.submitted = false;
     },
     checkCapital(){
       if(this.randomCountry){
@@ -64,7 +72,7 @@ export default {
   height: 20vh;
 }
 .field{
-  width: 10vw;
+  width: 12vw;
   display: inline-block;
   margin-top: 20px;
 }
